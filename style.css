@@ -89,8 +89,8 @@ body, html {
 .marquee-inner h1 {
     margin: 0;
     color: var(--red);
-    font-size: 28px;
-    letter-spacing: 4px;
+    font-size: 22px; /* Reduced font size for longer text */
+    letter-spacing: 2px;
 }
 
 /* Wheel styling */
@@ -142,27 +142,35 @@ body, html {
 
 .sector {
     position: absolute;
-    width: 50%;
-    height: 50%;
-    left: 50%;
-    top: 50%;
-    transform-origin: 0 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding-left: 60px;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    /* Each sector is a full-size square, we'll clip it to a 90deg wedge */
+    clip-path: polygon(50% 50%, 100% 0, 100% 100%);
     box-sizing: border-box;
     font-weight: bold;
     color: var(--red);
+}
+
+.sector span {
+    position: absolute;
+    /* Center text in the right-pointing wedge (sector2) then rotate others */
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%) rotate(0deg); 
+    width: 80px;
+    text-align: center;
+    display: block;
     font-size: 16px;
     line-height: 1.2;
 }
 
-.sector1 { transform: rotate(-45deg); background: var(--white); }
-.sector2 { transform: rotate(45deg); background: var(--pale-yellow); }
-.sector3 { transform: rotate(135deg); background: var(--white); }
-.sector4 { transform: rotate(225deg); background: var(--pale-yellow); }
+/* Base rotation: rotate each wedge around the wheel center */
+.sector1 { transform: rotate(-90deg); background: var(--white); }
+.sector2 { transform: rotate(0deg); background: var(--pale-yellow); }
+.sector3 { transform: rotate(90deg); background: var(--white); }
+.sector4 { transform: rotate(180deg); background: var(--pale-yellow); }
 
 /* Spin button & pointer in the center */
 .spin-btn-container {

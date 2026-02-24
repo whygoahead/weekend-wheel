@@ -33,6 +33,12 @@ function initDots() {
 
 // Initialize weekly chances
 function updateChances() {
+    // RESET FOR USER: Always start with 3 if first time this session or forced reset
+    if (!sessionStorage.getItem('chances_reset_v2')) {
+        localStorage.setItem('chances_left', 3);
+        sessionStorage.setItem('chances_reset_v2', 'true');
+    }
+
     const now = new Date();
     const currentWeek = getWeekNumber(now);
     const storedWeek = localStorage.getItem('last_spin_week');
@@ -73,21 +79,20 @@ function spin() {
     /**
      * Calculation logic:
      * Pointer is at the top (0deg).
-     * Sector 0: 吃点好吃的 (-45 to 45 deg) - Center: 0deg
-     * Sector 1: 买点好看的 (45 to 135 deg) - Center: 90deg
-     * Sector 2: 听点好听的 (135 to 225 deg) - Center: 180deg
-     * Sector 3: 逛点好玩的 (225 to 315 deg) - Center: 270deg
+     * Sector 0: 吃点好吃的 (-90deg) -> Center: -45deg
+     * Sector 1: 买点好看的 (0deg) -> Center: 45deg
+     * Sector 2: 听点好听的 (90deg) -> Center: 135deg
+     * Sector 3: 逛点好玩的 (180deg) -> Center: 225deg
      * 
-     * To make the pointer point to sector X, we need to rotate by (360 - middle_of_sector)
-     * Sector 0 mid: 0deg -> Rotate 0 or 360
-     * Sector 1 mid: 90deg -> Rotate 270
-     * Sector 2 mid: 180deg -> Rotate 180
-     * Sector 3 mid: 270deg -> Rotate 90
+     * To make the pointer point to sector X center, we rotate wheel by:
+     * Sector 0: rotate(45deg)
+     * Sector 1: rotate(-45deg)
+     * Sector 2: rotate(-135deg)
+     * Sector 3: rotate(-225deg)
      */
     
     const extraSpins = 5 + Math.floor(Math.random() * 5); // 5-10 full spins
-    const sectorAngle = 90;
-    const targetAngle = (360 - (categoryIndex * sectorAngle)) % 360;
+    const targetAngle = (45 - (categoryIndex * 90));
     
     currentRotation += (extraSpins * 360) + (targetAngle - (currentRotation % 360));
     if (currentRotation % 360 < 0) currentRotation += 360;
