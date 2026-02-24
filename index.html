@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>这周末干点啥</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>这周末干点啥</h1>
+        
+        <div class="wheel-container">
+            <div class="pointer"></div>
+            <div id="wheel" class="wheel">
+                <div class="sector">吃点好吃的</div>
+                <div class="sector">买点好看的</div>
+                <div class="sector">听点好听的</div>
+                <div class="sector">逛点好玩的</div>
+            </div>
+            <button id="spin-btn" class="spin-btn">立即抽奖</button>
+        </div>
+
+        <div id="result-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2>抽奖结果</h2>
+                <p id="result-category"></p>
+                <p id="result-prize"></p>
+                <div class="actions">
+                    <button id="redraw-btn">再抽一次</button>
+                    <button id="close-btn">好哒</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="info">
+            <p id="chance-count">本周剩余抽奖次数: 3</p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
