@@ -7,34 +7,62 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>这周末干点啥</h1>
+    <div class="page-bg">
+        <!-- Decorative elements -->
+        <div class="deco balloon1">🎈</div>
+        <div class="deco balloon2">🎈</div>
+        <div class="deco sphere1"></div>
+        <div class="deco sphere2"></div>
+        <div class="deco ribbon1"></div>
+        <div class="deco ribbon2"></div>
         
-        <div class="wheel-container">
-            <div class="pointer"></div>
-            <div id="wheel" class="wheel">
-                <div class="sector">吃点好吃的</div>
-                <div class="sector">买点好看的</div>
-                <div class="sector">听点好听的</div>
-                <div class="sector">逛点好玩的</div>
-            </div>
-            <button id="spin-btn" class="spin-btn">立即抽奖</button>
-        </div>
-
-        <div id="result-modal" class="modal hidden">
-            <div class="modal-content">
-                <h2>抽奖结果</h2>
-                <p id="result-category"></p>
-                <p id="result-prize"></p>
-                <div class="actions">
-                    <button id="redraw-btn">再抽一次</button>
-                    <button id="close-btn">好哒</button>
+        <div class="container">
+            <header class="header">
+                <p class="sub-title">这周末干点啥</p>
+                <div class="marquee-box">
+                    <div class="marquee-inner">
+                        <h1>快乐大转盘</h1>
+                    </div>
+                    <div class="marquee-lights">
+                        <span></span><span></span><span></span><span></span>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="wheel-main">
+                <div class="wheel-outer">
+                    <div class="outer-dots">
+                        <!-- JS will inject dots -->
+                    </div>
+                    <div id="wheel" class="wheel">
+                        <div class="sector sector1">吃点<br>好吃的</div>
+                        <div class="sector sector2">买点<br>好看的</div>
+                        <div class="sector sector3">听点<br>好听的</div>
+                        <div class="sector sector4">逛点<br>好玩的</div>
+                    </div>
+                    <!-- The center spin button also acts as the pointer -->
+                    <div class="spin-btn-container">
+                        <div class="pointer-tip"></div>
+                        <button id="spin-btn" class="spin-btn">开始<br>抽奖</button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="info">
-            <p id="chance-count">本周剩余抽奖次数: 3</p>
+            <div class="footer-info">
+                <p id="chance-count">剩余抽奖次数: 3 次</p>
+            </div>
+
+            <div id="result-modal" class="modal hidden">
+                <div class="modal-content">
+                    <h2>🎉 恭喜获得 🎉</h2>
+                    <p id="result-category"></p>
+                    <p id="result-prize"></p>
+                    <div class="actions">
+                        <button id="redraw-btn">再抽一次</button>
+                        <button id="close-btn">好哒</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script src="script.js"></script>
