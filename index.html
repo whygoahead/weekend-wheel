@@ -39,7 +39,6 @@
                         <div class="sector sector3"><span>听点<br>好听的</span></div>
                         <div class="sector sector4"><span>逛点<br>好玩的</span></div>
                     </div>
-                    <!-- The center spin button also acts as the pointer -->
                     <div class="spin-btn-container">
                         <div class="pointer-tip"></div>
                         <button id="spin-btn" class="spin-btn">开始<br>抽奖</button>
@@ -51,14 +50,30 @@
                 <p id="chance-count">剩余抽奖次数: 3 次</p>
             </div>
 
+            <!-- Mystery Box Style Modal -->
             <div id="result-modal" class="modal hidden">
-                <div class="modal-content">
-                    <h2>🎉 恭喜获得 🎉</h2>
-                    <p id="result-category"></p>
-                    <p id="result-prize"></p>
-                    <div class="actions">
-                        <button id="redraw-btn">再抽一次</button>
-                        <button id="close-btn">好哒</button>
+                <div class="modal-overlay"></div>
+                <canvas id="fireworks"></canvas>
+                <div class="blind-box-container">
+                    <div class="box-glow"></div>
+                    <div id="blind-box-wrapper" class="blind-box-wrapper">
+                        <div class="tap-hint">点击开启惊喜</div>
+                        <div id="blind-box" class="blind-box">
+                            <img src="https://miaobi-lite.bj.bcebos.com/miaobi/5mao/b%2755uy55uS5Zu%2B54mHXzE3MzQzNzQyMzkuODI3ODY2OA%3D%3D%27/0.png" alt="幸运盲盒">
+                        </div>
+                    </div>
+                    <div id="prize-card" class="prize-card hidden">
+                        <div class="prize-content">
+                            <div class="prize-image-wrapper">
+                                <img id="prize-img" src="" alt="奖品图片">
+                            </div>
+                            <h2 id="result-category"></h2>
+                            <p id="result-prize"></p>
+                            <div class="actions">
+                                <button id="redraw-btn">再拆一个</button>
+                                <button id="close-btn">好哒</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

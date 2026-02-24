@@ -6,6 +6,7 @@
     --red: #ff4c4c;
     --white: #ffffff;
     --pale-yellow: #fff9db;
+    --box-color: #ff8a00;
 }
 
 body, html {
@@ -14,6 +15,21 @@ body, html {
     height: 100%;
     overflow: hidden;
     font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+#fireworks {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5; /* Above overlay (1) but below blind-box-container (10) */
+    display: none;
+}
+
+#fireworks.show {
+    display: block;
 }
 
 .page-bg {
@@ -63,15 +79,6 @@ body, html {
     width: 90%;
 }
 
-.sub-title {
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 15px;
-    letter-spacing: 2px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-}
-
 .marquee-box {
     background: var(--yellow);
     padding: 8px;
@@ -89,7 +96,7 @@ body, html {
 .marquee-inner h1 {
     margin: 0;
     color: var(--red);
-    font-size: 22px; /* Reduced font size for longer text */
+    font-size: 22px;
     letter-spacing: 2px;
 }
 
@@ -146,7 +153,6 @@ body, html {
     height: 100%;
     left: 0;
     top: 0;
-    /* Each sector is a full-size square, we'll clip it to a 90deg wedge */
     clip-path: polygon(50% 50%, 100% 0, 100% 100%);
     box-sizing: border-box;
     font-weight: bold;
@@ -155,7 +161,6 @@ body, html {
 
 .sector span {
     position: absolute;
-    /* Center text in the right-pointing wedge (sector2) then rotate others */
     top: 50%;
     right: 20px;
     transform: translateY(-50%) rotate(0deg); 
@@ -166,13 +171,11 @@ body, html {
     line-height: 1.2;
 }
 
-/* Base rotation: rotate each wedge around the wheel center */
 .sector1 { transform: rotate(-90deg); background: var(--white); }
 .sector2 { transform: rotate(0deg); background: var(--pale-yellow); }
 .sector3 { transform: rotate(90deg); background: var(--white); }
 .sector4 { transform: rotate(180deg); background: var(--pale-yellow); }
 
-/* Spin button & pointer in the center */
 .spin-btn-container {
     position: absolute;
     top: 50%;
@@ -211,28 +214,17 @@ body, html {
     text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
-.spin-btn:active {
-    transform: scale(0.95);
-}
-
-.spin-btn:disabled {
-    filter: grayscale(0.8);
-    cursor: not-allowed;
-}
-
 .footer-info {
     margin-top: 40px;
     color: white;
     font-size: 20px;
     font-weight: bold;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
 }
 
-/* Modal */
+/* Blind Box Style Modal */
 .modal {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -241,28 +233,140 @@ body, html {
 
 .modal.hidden { display: none; }
 
-.modal-content {
+.modal-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85);
+    z-index: 1;
+}
+
+.blind-box-container {
+    position: relative;
+    width: 300px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.box-glow {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, var(--yellow) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+.blind-box-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.tap-hint {
+    color: var(--yellow);
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+}
+
+.blind-box {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: shake 2s infinite ease-in-out;
+}
+
+.blind-box-wrapper:hover {
+    transform: scale(1.05);
+}
+
+.blind-box-wrapper.hidden {
+    display: none;
+}
+
+.blind-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+}
+
+@keyframes shake {
+    0%, 100% { transform: rotate(0); }
+    10%, 30%, 50%, 70%, 90% { transform: rotate(-5deg); }
+    20%, 40%, 60%, 80% { transform: rotate(5deg); }
+}
+
+.blind-box.open {
+    animation: explode 0.5s forwards;
+}
+
+@keyframes explode {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.5; }
+    100% { transform: scale(0); opacity: 0; }
+}
+
+.prize-card {
     background: white;
-    padding: 30px;
+    width: 280px;
+    padding: 30px 20px;
     border-radius: 20px;
     text-align: center;
-    width: 80%;
-    max-width: 300px;
-    border: 6px solid var(--yellow);
-    animation: bounceIn 0.5s;
+    border: 5px solid var(--yellow);
+    box-shadow: 0 0 30px var(--yellow);
+    position: absolute;
+    z-index: 300; /* Stays below fireworks (350) but above everything else */
 }
 
-@keyframes bounceIn {
+.prize-card.hidden { display: none; }
+.prize-card.show { animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+@keyframes popIn {
     0% { transform: scale(0.3); opacity: 0; }
-    50% { transform: scale(1.05); opacity: 1; }
-    100% { transform: scale(1); }
+    100% { transform: scale(1); opacity: 1; }
 }
 
-.modal-content h2 { color: var(--red); margin-top: 0; }
-#result-category { font-size: 18px; color: #666; margin: 10px 0; }
-#result-prize { font-size: 26px; font-weight: bold; color: var(--red); margin: 15px 0; }
+.prize-image-wrapper {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
+    background: #f8f8f8;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
 
-.actions { display: flex; gap: 10px; justify-content: center; }
+.prize-image-wrapper img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+}
+
+.prize-card h2 { color: var(--red); margin: 0; font-size: 18px; }
+#result-prize { font-size: 28px; font-weight: bold; color: var(--red); margin: 15px 0; }
+
+.actions { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
 .actions button {
     padding: 10px 20px;
     border: none;
