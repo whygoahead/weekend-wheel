@@ -115,9 +115,9 @@ function initDots() {
 
 function updateChances() {
     // FORCED RESET: Always start with 3 if first time this version is loaded
-    if (!sessionStorage.getItem('chances_reset_v5')) {
+    if (!sessionStorage.getItem('chances_reset_v6')) {
         localStorage.setItem('chances_left', 3);
-        sessionStorage.setItem('chances_reset_v5', 'true');
+        sessionStorage.setItem('chances_reset_v6', 'true');
     }
     const now = new Date();
     const currentWeek = getWeekNumber(now);
@@ -150,10 +150,35 @@ function spin() {
     localStorage.setItem('chances_left', chancesLeft);
     chanceCountText.textContent = `剩余抽奖次数: ${chancesLeft} 次`;
 
+    /**
+     * CALIBRATION LOGIC:
+     * Pointer is at the TOP (0deg).
+     * The sectors are defined in CSS:
+     * .sector1: transform: rotate(-90deg) -> Covers -90 to 0 deg. Center is -45deg.
+     * .sector2: transform: rotate(0deg)   -> Covers 0 to 90 deg. Center is 45deg.
+     * .sector3: transform: rotate(90deg)  -> Covers 90 to 180 deg. Center is 135deg.
+     * .sector4: transform: rotate(180deg) -> Covers 180 to 270 deg. Center is 225deg.
+     * 
+     * To make the TOP pointer (0deg) point to Sector X center, 
+     * the wheel must be rotated by: - (Center_of_Sector_X)
+     * Sector 0: rotate(45deg)
+     * Sector 1: rotate(-45deg)
+     * Sector 2: rotate(-135deg)
+     * Sector 3: rotate(-225deg)
+     */
     const categoryIndex = Math.floor(Math.random() * 4);
-    const extraSpins = 5 + Math.floor(Math.random() * 5);
-    const targetAngle = (45 - (categoryIndex * 90));
-    currentRotation += (extraSpins * 360) + (targetAngle - (currentRotation % 360));
+    const sectorCenters = [-45, 45, 135, 225];
+    const targetSectorCenter = sectorCenters[categoryIndex];
+    
+    // Calculate target rotation to bring sector center to 0deg (the pointer)
+    const targetAngle = -targetSectorCenter;
+    
+    const extraSpins = 8 + Math.floor(Math.random() * 5); // 8-12 full spins for excitement
+    
+    // Add randomness within the sector (+/- 30 degrees from center) to look natural
+    const randomOffset = (Math.random() - 0.5) * 60; 
+    
+    currentRotation += (extraSpins * 360) + (targetAngle - (currentRotation % 360)) + randomOffset;
     wheel.style.transform = `rotate(${currentRotation}deg)`;
 
     setTimeout(() => {

@@ -111,8 +111,10 @@ body, html {
     height: 320px;
     background: var(--yellow);
     border-radius: 50%;
-    padding: 15px;
-    box-sizing: border-box;
+    /* Use flex to perfectly center the inner wheel */
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
     box-shadow: 0 8px 0 #d4b83b, 0 15px 30px rgba(0,0,0,0.3);
 }
@@ -125,26 +127,28 @@ body, html {
 
 .dot {
     position: absolute;
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     background: white;
     left: 50%;
-    top: 5px;
-    transform-origin: 0 155px;
+    top: 6px; /* Slightly adjust to be perfectly centered in the yellow rim */
+    transform-origin: 0 154px; /* 320/2 - 6 = 154 */
+    margin-left: -6px;
 }
 
 .dot:nth-child(even) { background: var(--orange); }
 
 .wheel {
-    width: 100%;
-    height: 100%;
+    width: 280px; /* Explicit size for better control */
+    height: 280px;
     background: white;
     border-radius: 50%;
     position: relative;
     overflow: hidden;
     transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1);
-    border: 5px solid white;
+    border: 4px solid white;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
 }
 
 .sector {
